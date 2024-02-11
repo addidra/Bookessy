@@ -15,6 +15,8 @@ import {
   collection,
   FIREBASE_AUTH,
   addDoc,
+  setDoc,
+  doc,
 } from "../../firebase";
 import ClubList from "../Search/ClubList";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -42,8 +44,8 @@ const MoreDetail = ({ route }) => {
         collection(FIREBASE_FIRESTORE, "clubs")
       );
       const clubList = [];
-      querySnapshot.forEach((doc) => {
-        clubList.push({ id: doc.id, ...doc.data() });
+      querySnapshot.forEach((data) => {
+        clubList.push({ id: data.id, ...data.data() });
       });
       setClubList(clubList);
     } catch (err) {
@@ -73,8 +75,8 @@ const MoreDetail = ({ route }) => {
       // Adding user into the database
       delete userInfo.password;
       userInfo.clubsFollowing = selectedClubs;
-      await addDoc(collection(FIREBASE_FIRESTORE, "Users"), {
-        uid: res.user.uid,
+      userRef = doc(FIREBASE_FIRESTORE, "Users", res.user.uid);
+      await setDoc(userRef, {
         ...userInfo,
       });
     } catch (error) {

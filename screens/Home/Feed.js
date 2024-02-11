@@ -62,11 +62,12 @@ const Feed = ({ feed_detail }) => {
   // Effect
   useEffect(() => {
     getPostRef();
+    console.log("passed from club.js: ", feed_detail);
   }, []);
 
-  useEffect(() => {
-    console.log("useEffect feed_detail: ", postData);
-  }, [postData]);
+  // useEffect(() => {
+  //   console.log("useEffect feed_details: ", postData);
+  // }, [postData]);
 
   return (
     <GestureHandlerRootView>

@@ -15,6 +15,8 @@ import DUMMY_DATA from "../../DUMMY_DATA.js";
 import Feed from "./Feed";
 import ChatBotMain from "../ChatBot/ChatBotMain";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase.js";
+import { useFocusEffect } from "@react-navigation/native";
+
 const Home = () => {
   const [loaded] = useFonts({
     Pacifico: require("../../assets/fonts/Pacifico-Regular.ttf"),
@@ -42,6 +44,12 @@ const Home = () => {
   useEffect(() => {
     getPostList();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getPostList();
+    }, [])
+  );
 
   if (!loaded) {
     return null;
