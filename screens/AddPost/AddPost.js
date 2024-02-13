@@ -111,7 +111,7 @@ const AddPost = () => {
 
   return (
     <View style={styles.container}>
-      <Button onPress={test} title="Click Me"></Button>
+      {/* <Button onPress={test} title="Click Me"></Button> */}
       <TextInput
         style={styles.input}
         placeholder="Enter Quote from Book"

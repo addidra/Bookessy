@@ -7,6 +7,9 @@ import {
   doc,
   getDoc,
   setDoc,
+  query,
+  where,
+  updateDoc,
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
@@ -31,6 +34,19 @@ const FIREBASE_AUTH = initializeAuth(app, {
 
 const FIREBASE_FIRESTORE = getFirestore(app);
 
+// Authenticated user
+let authenticatedUserId = null;
+
+onAuthStateChanged(FIREBASE_AUTH, (user) => {
+  if (user) {
+    authenticatedUserId = user.uid;
+  } else {
+    authenticatedUserId = null;
+  }
+});
+
+const getAuthenticatedUserId = () => authenticatedUserId;
+
 export {
   FIREBASE_AUTH,
   FIREBASE_FIRESTORE,
@@ -40,4 +56,9 @@ export {
   getDoc,
   doc,
   setDoc,
+  onAuthStateChanged,
+  query,
+  where,
+  updateDoc,
+  getAuthenticatedUserId,
 };

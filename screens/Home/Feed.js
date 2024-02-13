@@ -8,16 +8,29 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { FIREBASE_FIRESTORE, collection, getDoc, doc } from "../../firebase";
+import {
+  FIREBASE_FIRESTORE,
+  collection,
+  getDoc,
+  doc,
+  updateDoc,
+  addDoc,
+  getAuthenticatedUserId,
+  query,
+  where,
+  getDocs,
+} from "../../firebase";
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
   TapGestureHandler,
 } from "react-native-gesture-handler";
+import { deleteDoc } from "firebase/firestore";
 
 const Feed = ({ feed_detail }) => {
   // States
+  const userUID = getAuthenticatedUserId();
   const [postData, setPostData] = useState({
     username: undefined,
     name: undefined,
@@ -26,16 +39,6 @@ const Feed = ({ feed_detail }) => {
   const [like, setLike] = useState(false);
 
   // Function
-
-  const getPost = async () => {
-    try {
-      let docRef = doc(FIREBASE_FIRESTORE, "Posts", feed_detail.id);
-      let docSnap = await getDoc(docRef);
-      console.log("getPost res: ", docSnap.data());
-    } catch (error) {
-      console.log("getPost error: ", error);
-    }
-  };
 
   const getPostRef = async () => {
     try {
@@ -47,27 +50,77 @@ const Feed = ({ feed_detail }) => {
       docSnap = await getDoc(docRef);
       feed_detail.name = docSnap.data().name;
       setPostData(feed_detail);
+
+      // Check if the user has already liked the post
+      const likeQuery = query(
+        collection(FIREBASE_FIRESTORE, "Likes"),
+        where("postID", "==", postData.id),
+        where("likedBy", "==", userUID)
+      );
+
+      const likeDocs = await getDocs(likeQuery);
+      if (likeDocs.size > 0) {
+        setLike(true);
+      }
     } catch (err) {
       console.log("getPostUsername err: ", err);
     }
   };
 
-  const interactLike = () => {
-    setLike(!like);
-    setPostData((prevData) => {
-      const newLikes = like ? prevData.likes - 1 : prevData.likes + 1;
-      return { ...prevData, likes: newLikes };
-    });
+  const interactLike = async () => {
+    const newLike = !like;
+    const newLikes = newLike ? postData.likes + 1 : postData.likes - 1;
+    setLike(newLike);
+    setPostData((prevData) => ({ ...prevData, likes: newLikes }));
+
+    const timeout = setTimeout(async () => {
+      await updatePosts(newLike, newLikes);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
   };
+
+  const updatePosts = async (newLike, newLikes) => {
+    try {
+      const postRef = doc(FIREBASE_FIRESTORE, "Posts", postData.id);
+      await updateDoc(postRef, {
+        likes: newLikes,
+      });
+      console.log("updated succesfully");
+
+      if (newLike) {
+        // Add the like document
+        await addDoc(collection(FIREBASE_FIRESTORE, "Likes"), {
+          clubID: postData.clubID,
+          likedBy: userUID,
+          postID: postData.id,
+          userID: postData.userID,
+        });
+
+        console.log("doc liked");
+      } else {
+        const likeQuery = query(
+          collection(FIREBASE_FIRESTORE, "Likes"),
+          where("postID", "==", postData.id),
+          where("likedBy", "==", userUID)
+        );
+
+        const likeDocs = await getDocs(likeQuery);
+        likeDocs.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+
+        console.log("liked doc deleted");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Effect
   useEffect(() => {
     getPostRef();
-    console.log("passed from club.js: ", feed_detail);
   }, []);
-
-  // useEffect(() => {
-  //   console.log("useEffect feed_details: ", postData);
-  // }, [postData]);
 
   return (
     <GestureHandlerRootView>
