@@ -10,13 +10,15 @@ import AddPost from "./screens/AddPost/AddPost";
 import UserProfile from "./screens/Profile/UserProfile";
 import { SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Chat from "./screens/Home/Chat";
-import ChatBotMain from "./screens/ChatBot/ChatBotMain";
+import Chat from "./screens/ChatInbox/Chat";
+import ChatBotMain from "./screens/Home/ChatBotMain";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./firebase";
 import MoreDetail from "./screens/Login/MoreDetail";
-
+import ChatInbox from "./screens/ChatInbox/ChatInbox";
+import AddUser from "./screens/ChatInbox/AddUser";
+import UserInfo from "./screens/ChatInbox/UserInfo";
 // Tabs
 const Tab = createBottomTabNavigator();
 
@@ -57,6 +59,20 @@ const SearchScreenStack = () => {
   );
 };
 
+const ChatInboxScreenStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="ChatInboxScreen"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="ChatInboxScreen" component={ChatInbox} />
+      <Stack.Screen name="AddUserScreen" component={AddUser} />
+      <Stack.Screen name="UserInfoScreen" component={UserInfo} />
+      <Stack.Screen name="PersonalChat" component={Chat} />
+    </Stack.Navigator>
+  );
+};
+
 const TabMain = () => {
   return (
     <Tab.Navigator
@@ -86,7 +102,7 @@ const TabMain = () => {
       <Tab.Screen name="Home" component={HomeChatStack} />
       <Tab.Screen name="Search" component={SearchScreenStack} />
       <Tab.Screen name="Post" component={AddPost} />
-      <Tab.Screen name="Chat" component={Chat} />
+      <Tab.Screen name="Chat" component={ChatInboxScreenStack} />
       <Tab.Screen name="Profile" component={UserProfile} />
     </Tab.Navigator>
   );

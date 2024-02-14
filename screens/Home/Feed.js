@@ -37,6 +37,7 @@ const Feed = ({ feed_detail }) => {
     ...feed_detail,
   });
   const [like, setLike] = useState(false);
+  const [updateFlag, setUpdateFlag] = useState(false);
 
   // Function
 
@@ -72,12 +73,16 @@ const Feed = ({ feed_detail }) => {
     const newLikes = newLike ? postData.likes + 1 : postData.likes - 1;
     setLike(newLike);
     setPostData((prevData) => ({ ...prevData, likes: newLikes }));
+    if (!updateFlag) {
+      setUpdateFlag(true);
 
-    const timeout = setTimeout(async () => {
-      await updatePosts(newLike, newLikes);
-    }, 3000);
+      const timeout = setTimeout(async () => {
+        await updatePosts(newLike, newLikes);
+        setUpdateFlag(false);
+      }, 3000);
 
-    return () => clearTimeout(timeout);
+      return () => clearTimeout(timeout);
+    }
   };
 
   const updatePosts = async (newLike, newLikes) => {

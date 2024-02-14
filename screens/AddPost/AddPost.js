@@ -170,7 +170,9 @@ const AddPost = () => {
           />
         </View>
       )}
-      <Button title="Submit" onPress={handleSubmit} />
+      <TouchableOpacity onPress={handleSubmit} style={styles.submitBtn}>
+        <Text style={{ color: colors.secondary, fontSize: 20 }}>Submit</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -233,6 +235,12 @@ const styles = StyleSheet.create({
     borderBottomColor: "gray",
     alignSelf: "center",
     justifyContent: "center",
+  },
+  submitBtn: {
+    padding: 10,
+    borderWidth: 2,
+    borderColor: colors.accent,
+    borderRadius: 15,
   },
 });
 

@@ -9,8 +9,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import React, { useEffect, useState, useCallback } from "react";
+import { FontAwesome5, Entypo } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
   FIREBASE_AUTH,
   FIREBASE_FIRESTORE,
@@ -23,88 +23,81 @@ import {
   getDoc,
 } from "../../firebase";
 import Feed from "../Home/Feed";
-import { useFocusEffect } from "@react-navigation/native";
 
 const colors = {
   primary: "#242038",
   secondary: "#f7ece1",
   accent: "#9067C6",
 };
-
-const UserProfile = () => {
-  // States
-  const [user, setUser] = useState(null);
+const UserInfo = ({ route }) => {
+  const { userDetail } = route.params;
+  const user = userDetail;
+  const [homieFlag, setHomieFlag] = useState(false);
   const [posts, setPosts] = useState(null);
 
-  // Function
-  const handleLogout = () => {
-    FIREBASE_AUTH.signOut();
-  };
-
-  const getUser = () => {
+  const addFriend = async (id) => {
     try {
-      onAuthStateChanged(FIREBASE_AUTH, async (authenticatedUser) => {
-        const userUID = authenticatedUser.uid;
-        const docRef = doc(FIREBASE_FIRESTORE, "Users", userUID);
-        const docSnap = await getDoc(docRef);
-        const userData = { id: docSnap.id, ...docSnap.data() };
-        setUser(userData);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      if (homieFlag) {
+        setHomieFlag(false);
+        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", userUID), {
+          homies: arrayRemove(id),
+        });
+        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
+          homies: arrayRemove(userUID),
+        });
+      } else {
+        setHomieFlag(true);
+        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", userUID), {
+          homies: arrayUnion(id),
+        });
+        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
+          homies: arrayUnion(userUID),
+        });
+      }
+    } catch (error) {}
   };
 
   const getPosts = async () => {
     try {
-      const postRef = collection(FIREBASE_FIRESTORE, "Posts");
-      const querySnapshot = await getDocs(
-        query(postRef, where("userID", "==", user.id))
-      );
-      const posts = [];
-      querySnapshot.forEach((post) => {
-        posts.push({ id: post.id, ...post.data() });
-      });
-      setPosts(posts);
+      if (user && user.id) {
+        const postRef = collection(FIREBASE_FIRESTORE, "Posts");
+        const querySnapshot = await getDocs(
+          query(postRef, where("userID", "==", user.id))
+        );
+        const posts = [];
+        querySnapshot.forEach((post) => {
+          posts.push({ id: post.id, ...post.data() });
+        });
+        setPosts(posts);
+        console.log(posts);
+      } else {
+        console.log("User ID is undefined.");
+      }
     } catch (err) {
       console.log("Error: ", err);
     }
   };
 
-  // Effects
-  useEffect(() => {
-    getUser();
-  }, []);
-
   useEffect(() => {
     if (user) {
       getPosts();
-      console.log(user, posts);
+      console.log("this is the post", user.id, posts);
     }
+    console.log("UserInfo: ", user.homies.length);
   }, [user]);
 
-  useFocusEffect(
-    useCallback(() => {
-      getUser();
-      getPosts();
-    }, [])
-  );
-
-  // Component
   const UserHeader = () => {
     return (
       <>
         <View style={{ rowGap: 7 }}>
           <View style={styles.headerDetails}>
             <TouchableOpacity style={styles.userCount}>
-              <Text style={styles.userCount}>
-                {user.homies ? user.homies.length : 0}
-              </Text>
+              <Text style={styles.userCount}>{user.homies.length}</Text>
               <Text style={{ color: colors.secondary }}>Homies</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.userCount}>
               <Text style={styles.userCount}>
-                {user.clubsFollowing ? user.clubsFollowing.length : 0}
+                {user.clubsFollowing ? user.clubsFollowing.length : "null"}
               </Text>
               <Text style={{ color: colors.secondary }}>Clubs Following</Text>
             </TouchableOpacity>
@@ -121,9 +114,21 @@ const UserProfile = () => {
         <>
           <View style={styles.upperContainer}>
             <Text style={styles.username}>{user.username}</Text>
-            <TouchableHighlight onPress={handleLogout} style={styles.logoutBtn}>
-              <Text style={{ color: colors.secondary }}>Log Out</Text>
-            </TouchableHighlight>
+            <TouchableOpacity onPress={() => addFriend(user.id)}>
+              {homieFlag ? (
+                <FontAwesome5
+                  name="handshake-slash"
+                  size={35}
+                  color={colors.secondary}
+                />
+              ) : (
+                <FontAwesome5
+                  name="handshake"
+                  size={35}
+                  color={colors.secondary}
+                />
+              )}
+            </TouchableOpacity>
           </View>
           <Text style={styles.userBio}>{user.bio}</Text>
           <FlatList
@@ -141,7 +146,7 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default UserInfo;
 
 const styles = StyleSheet.create({
   container: {

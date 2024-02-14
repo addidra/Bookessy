@@ -13,7 +13,7 @@ import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import DUMMY_DATA from "../../DUMMY_DATA.js";
 import Feed from "./Feed";
-import ChatBotMain from "../ChatBot/ChatBotMain";
+import ChatBotMain from "./ChatBotMain.js";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase.js";
 import { useFocusEffect } from "@react-navigation/native";
 
