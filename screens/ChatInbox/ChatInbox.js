@@ -16,6 +16,7 @@ import {
   getAuthenticatedUserId,
   getDoc,
   doc,
+  FIREBASE_AUTH,
 } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../colors";
@@ -24,7 +25,7 @@ import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 
 const ChatInbox = () => {
-  const userUID = getAuthenticatedUserId();
+  const userUID = FIREBASE_AUTH.currentUser.uid;
   const navigation = useNavigation();
   const [userList, setUserList] = useState(null);
   const [filteredUserList, setFilteredUserList] = useState();

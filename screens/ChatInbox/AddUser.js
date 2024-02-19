@@ -17,44 +17,25 @@ import {
   getDoc,
   doc,
   updateDoc,
+  FIREBASE_AUTH,
 } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../colors";
 import { FontAwesome5, Entypo } from "@expo/vector-icons";
-import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { arrayRemove, arrayUnion, query, where } from "firebase/firestore";
+import FlatListUser from "./FlatListUser";
 
 const AddUser = () => {
   // States
-  const userUID = getAuthenticatedUserId();
+  const userUID = FIREBASE_AUTH.currentUser.uid;
   const navigation = useNavigation();
   const [userList, setUserList] = useState();
   const [filteredUserList, setFilteredUserList] = useState();
   const searchRef = useRef();
   const [searchFocus, setSearchFocus] = useState(false);
   const [homieFlag, setHomieFlag] = useState(false);
-  // Functions
 
-  const addFriend = async (id) => {
-    try {
-      if (homieFlag) {
-        setHomieFlag(false);
-        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", userUID), {
-          homies: arrayRemove(id),
-        });
-        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
-          homies: arrayRemove(userUID),
-        });
-      } else {
-        setHomieFlag(true);
-        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", userUID), {
-          homies: arrayUnion(id),
-        });
-        await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
-          homies: arrayUnion(userUID),
-        });
-      }
-    } catch (error) {}
-  };
+  // Functions
 
   const onSearch = (txt) => {
     if (txt === "") {
@@ -88,34 +69,8 @@ const AddUser = () => {
   useEffect(() => {
     getUserList();
   }, []);
-  // Components
 
-  const renderUser = ({ item }) => {
-    return (
-      <View style={styles.user}>
-        <TouchableOpacity style={{ flex: 1 }}>
-          <Text style={{ color: "#e4d5b7", fontSize: 44 }}>
-            {item.username}
-          </Text>
-          <Text style={{ color: "pink" }}>{item.bio}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => addFriend(item.id)}>
-          {homieFlag ? (
-            <FontAwesome5
-              name="handshake-slash"
-              size={35}
-              color={colors.secondary}
-            />
-          ) : (
-            <FontAwesome5 name="handshake" size={35} color={colors.secondary} />
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Entypo name="chat" size={35} color={colors.secondary} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  // Components
 
   if (userList === null) {
     return (
@@ -144,7 +99,7 @@ const AddUser = () => {
       />
       <FlatList
         data={filteredUserList}
-        renderItem={renderUser}
+        renderItem={({ item }) => <FlatListUser item={item} />}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />

@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   FIREBASE_FIRESTORE,
+  FIREBASE_AUTH,
   collection,
   getDoc,
   doc,
@@ -30,7 +31,7 @@ import { deleteDoc } from "firebase/firestore";
 
 const Feed = ({ feed_detail }) => {
   // States
-  const userUID = getAuthenticatedUserId();
+  const userUID = FIREBASE_AUTH.currentUser.uid;
   const [postData, setPostData] = useState({
     username: undefined,
     name: undefined,

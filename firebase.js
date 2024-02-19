@@ -34,19 +34,6 @@ const FIREBASE_AUTH = initializeAuth(app, {
 
 const FIREBASE_FIRESTORE = getFirestore(app);
 
-// Authenticated user
-let authenticatedUserId = null;
-
-onAuthStateChanged(FIREBASE_AUTH, (user) => {
-  if (user) {
-    authenticatedUserId = user.uid;
-  } else {
-    authenticatedUserId = null;
-  }
-});
-
-const getAuthenticatedUserId = () => authenticatedUserId;
-
 export {
   FIREBASE_AUTH,
   FIREBASE_FIRESTORE,
@@ -60,5 +47,4 @@ export {
   query,
   where,
   updateDoc,
-  getAuthenticatedUserId,
 };

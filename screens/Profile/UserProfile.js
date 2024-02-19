@@ -24,6 +24,7 @@ import {
 } from "../../firebase";
 import Feed from "../Home/Feed";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const colors = {
   primary: "#242038",
@@ -32,9 +33,12 @@ const colors = {
 };
 
 const UserProfile = () => {
+  // Setup
+  const navigation = useNavigation();
+
   // States
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   // Function
   const handleLogout = () => {
@@ -96,12 +100,12 @@ const UserProfile = () => {
       <>
         <View style={{ rowGap: 7 }}>
           <View style={styles.headerDetails}>
-            <TouchableOpacity style={styles.userCount}>
+            <View style={styles.userCount}>
               <Text style={styles.userCount}>
                 {user.homies ? user.homies.length : 0}
               </Text>
               <Text style={{ color: colors.secondary }}>Homies</Text>
-            </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.userCount}>
               <Text style={styles.userCount}>
                 {user.clubsFollowing ? user.clubsFollowing.length : 0}
@@ -117,22 +121,41 @@ const UserProfile = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {posts ? (
+      {user ? (
         <>
           <View style={styles.upperContainer}>
-            <Text style={styles.username}>{user.username}</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.username}>{user.username}</Text>
+              <Text style={styles.userBio}>{user.bio}</Text>
+            </View>
+            <View style={styles.userCount}>
+              <Text style={styles.userCount}>
+                {user.homies ? user.homies.length : 0}
+              </Text>
+              <Text style={{ color: colors.secondary }}>Homies</Text>
+            </View>
             <TouchableHighlight onPress={handleLogout} style={styles.logoutBtn}>
               <Text style={{ color: colors.secondary }}>Log Out</Text>
             </TouchableHighlight>
           </View>
-          <Text style={styles.userBio}>{user.bio}</Text>
-          <FlatList
-            data={posts}
-            renderItem={({ item }) => <Feed feed_detail={item} />}
-            keyExtractor={(item) => item.id}
-            ListHeaderComponent={() => <UserHeader />}
-            showsVerticalScrollIndicator={false}
-          />
+          {posts.length != 0 ? (
+            <FlatList
+              data={posts}
+              renderItem={({ item }) => <Feed feed_detail={item} />}
+              keyExtractor={(item) => item.id}
+              ListHeaderComponent={<Text style={styles.postTitle}>POSTS</Text>}
+              showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <View style={styles.noPost}>
+              <Text style={{ color: colors.secondary, fontSize: 30 }}>
+                No Posts Yet
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Post")}>
+                <Text style={styles.addPostBtn}>Add Posts</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </>
       ) : (
         <ActivityIndicator size={50} color="blue" />
@@ -153,7 +176,8 @@ const styles = StyleSheet.create({
   upperContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    alignItems: "center",
+    columnGap: 20,
   },
   username: {
     fontSize: 40,
@@ -185,5 +209,20 @@ const styles = StyleSheet.create({
   postTitle: {
     fontSize: 20,
     color: colors.accent,
+  },
+  noPost: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    rowGap: 20,
+  },
+  addPostBtn: {
+    fontSize: 20,
+    textAlign: "center",
+    padding: 7,
+    color: colors.secondary,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.accent,
   },
 });

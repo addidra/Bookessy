@@ -34,7 +34,7 @@ const Chat = ({ route }) => {
   const { userDetail } = route.params;
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
-  const userUID = getAuthenticatedUserId();
+  const userUID = FIREBASE_AUTH.currentUser.uid;
 
   useEffect(() => {
     console.log("Personal Chat", userDetail);

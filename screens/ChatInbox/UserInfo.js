@@ -21,6 +21,7 @@ import {
   where,
   doc,
   getDoc,
+  getAuthenticatedUserId,
 } from "../../firebase";
 import Feed from "../Home/Feed";
 
@@ -34,6 +35,7 @@ const UserInfo = ({ route }) => {
   const user = userDetail;
   const [homieFlag, setHomieFlag] = useState(false);
   const [posts, setPosts] = useState(null);
+  const userUID = FIREBASE_AUTH.currentUser.uid;
 
   const addFriend = async (id) => {
     try {
@@ -83,37 +85,26 @@ const UserInfo = ({ route }) => {
       getPosts();
       console.log("this is the post", user.id, posts);
     }
-    console.log("UserInfo: ", user.homies.length);
+    if (user.homies.includes(userUID)) {
+      setHomieFlag(true);
+    } else {
+      setHomieFlag(false);
+    }
   }, [user]);
-
-  const UserHeader = () => {
-    return (
-      <>
-        <View style={{ rowGap: 7 }}>
-          <View style={styles.headerDetails}>
-            <TouchableOpacity style={styles.userCount}>
-              <Text style={styles.userCount}>{user.homies.length}</Text>
-              <Text style={{ color: colors.secondary }}>Homies</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.userCount}>
-              <Text style={styles.userCount}>
-                {user.clubsFollowing ? user.clubsFollowing.length : "null"}
-              </Text>
-              <Text style={{ color: colors.secondary }}>Clubs Following</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.postTitle}>POSTS</Text>
-        </View>
-      </>
-    );
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       {posts ? (
         <>
           <View style={styles.upperContainer}>
-            <Text style={styles.username}>{user.username}</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.username}>{user.username}</Text>
+              <Text style={styles.userBio}>{user.bio}</Text>
+            </View>
+            <View style={styles.userCount}>
+              <Text style={{ color: colors.secondary }}>Homies</Text>
+              <Text style={styles.userCount}>{user.homies.length}</Text>
+            </View>
             <TouchableOpacity onPress={() => addFriend(user.id)}>
               {homieFlag ? (
                 <FontAwesome5
@@ -130,12 +121,11 @@ const UserInfo = ({ route }) => {
               )}
             </TouchableOpacity>
           </View>
-          <Text style={styles.userBio}>{user.bio}</Text>
           <FlatList
             data={posts}
             renderItem={({ item }) => <Feed feed_detail={item} />}
             keyExtractor={(item) => item.id}
-            ListHeaderComponent={() => <UserHeader />}
+            ListHeaderComponent={<Text style={styles.postTitle}>POSTS</Text>}
             showsVerticalScrollIndicator={false}
           />
         </>
@@ -158,7 +148,8 @@ const styles = StyleSheet.create({
   upperContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    alignItems: "center",
+    columnGap: 20,
   },
   username: {
     fontSize: 40,
