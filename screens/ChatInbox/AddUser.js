@@ -13,11 +13,11 @@ import {
   FIREBASE_FIRESTORE,
   getDocs,
   collection,
+  FIREBASE_AUTH,
   getAuthenticatedUserId,
   getDoc,
   doc,
   updateDoc,
-  FIREBASE_AUTH,
 } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../colors";
@@ -29,7 +29,7 @@ const AddUser = () => {
   // States
   const userUID = FIREBASE_AUTH.currentUser.uid;
   const navigation = useNavigation();
-  const [userList, setUserList] = useState();
+  const [userList, setUserList] = useState(null);
   const [filteredUserList, setFilteredUserList] = useState();
   const searchRef = useRef();
   const [searchFocus, setSearchFocus] = useState(false);
@@ -61,7 +61,7 @@ const AddUser = () => {
       setUserList(userList);
       setFilteredUserList(userList);
     } catch (err) {
-      console.log("this is the getUserList Error: ", err);
+      console.log("What the fucking hell: ", err);
     }
   };
 

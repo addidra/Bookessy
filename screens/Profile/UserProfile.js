@@ -100,12 +100,17 @@ const UserProfile = () => {
       <>
         <View style={{ rowGap: 7 }}>
           <View style={styles.headerDetails}>
-            <View style={styles.userCount}>
+            <TouchableOpacity
+              style={styles.userCount}
+              onPress={() => {
+                navigation.navigate("Chat");
+              }}
+            >
               <Text style={styles.userCount}>
                 {user.homies ? user.homies.length : 0}
               </Text>
               <Text style={{ color: colors.secondary }}>Homies</Text>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.userCount}>
               <Text style={styles.userCount}>
                 {user.clubsFollowing ? user.clubsFollowing.length : 0}

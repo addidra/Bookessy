@@ -2,7 +2,12 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import colors from "../../colors";
 import { FontAwesome5, Entypo } from "@expo/vector-icons";
-import { FIREBASE_FIRESTORE, updateDoc, doc } from "../../firebase";
+import {
+  FIREBASE_FIRESTORE,
+  updateDoc,
+  doc,
+  FIREBASE_AUTH,
+} from "../../firebase";
 import {
   arrayRemove,
   arrayUnion,

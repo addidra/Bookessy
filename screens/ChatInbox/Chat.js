@@ -17,6 +17,7 @@ import {
   getDoc,
   doc,
   where,
+  serverTimestamp,
 } from "firebase/firestore";
 import {
   FIREBASE_AUTH,
@@ -36,18 +37,37 @@ const Chat = ({ route }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const userUID = FIREBASE_AUTH.currentUser.uid;
 
+  // Functions
+  const sendMessage = async () => {
+    userSnap = await getDoc(doc(FIREBASE_FIRESTORE, "Users", userUID));
+    if (message.trim() !== "") {
+      await addDoc(collection(FIREBASE_FIRESTORE, "Chats"), {
+        message,
+        timestamp: serverTimestamp(),
+        senderUsername: userSnap.data().username,
+        participants: [userUID, userDetail.id],
+        sender: userUID,
+        recipient: userDetail.id,
+      });
+      setMessage("");
+    }
+  };
+
+  // Effects
   useEffect(() => {
     console.log("Personal Chat", userDetail);
     const q = query(
       collection(FIREBASE_FIRESTORE, "Chats"),
-      where("participants", "array-contains", userUID, userDetail.id),
-      where("sender", "==", userUID), // Include only chats where the current user is the sender
-      where("recipient", "==", userDetail.id) // Include only chats where recipient is the recipient's user ID
+      where("participants", "array-contains", userUID),
+      orderBy("timestamp", "asc")
     );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((doc) => {
-        messages.push(doc.data());
+        const data = doc.data();
+
+        if (data.participants.includes(userDetail.id))
+          messages.push({ id: doc.id, ...doc.data() });
       });
       setChatMessages(messages);
     });
@@ -55,21 +75,7 @@ const Chat = ({ route }) => {
     return () => unsubscribe();
   }, [userUID, userDetail.id]);
 
-  const sendMessage = async () => {
-    userSnap = await getDoc(doc(FIREBASE_FIRESTORE, "Users", userUID));
-    if (message.trim() !== "") {
-      await addDoc(collection(FIREBASE_FIRESTORE, "Chats"), {
-        message: message,
-        sender: userUID,
-        senderUsername: userSnap.data().username,
-        recipient: userDetail.id,
-        participants: [userUID, userDetail.id],
-        timestamp: new Date(),
-      });
-      setMessage("");
-    }
-  };
-
+  // Components
   const renderChatMessage = ({ item }) => (
     <View
       style={[
@@ -90,7 +96,7 @@ const Chat = ({ route }) => {
       <FlatList
         data={chatMessages}
         renderItem={renderChatMessage}
-        keyExtractor={(item) => item.timestamp.toString()}
+        keyExtractor={(item) => item.id}
       />
       <View style={styles.inputContainer}>
         <TextInput
