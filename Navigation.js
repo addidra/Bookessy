@@ -19,6 +19,7 @@ import MoreDetail from "./screens/Login/MoreDetail";
 import ChatInbox from "./screens/ChatInbox/ChatInbox";
 import AddUser from "./screens/ChatInbox/AddUser";
 import UserInfo from "./screens/ChatInbox/UserInfo";
+import ClubChat from "./screens/Search/ClubChat";
 // Tabs
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +56,7 @@ const SearchScreenStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Club" component={Club} />
+      <Stack.Screen name="ClubChat" component={ClubChat} />
     </Stack.Navigator>
   );
 };

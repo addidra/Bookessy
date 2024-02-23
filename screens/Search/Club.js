@@ -3,6 +3,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -16,13 +17,15 @@ import {
 } from "../../firebase";
 import { query, where } from "firebase/firestore";
 import Feed from "../Home/Feed";
-
+import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 const colors = {
   primary: "#242038",
   secondary: "#f7ece1",
   accent: "#9067C6",
 };
 const Club = ({ route }) => {
+  const navigation = useNavigation();
   const { clubDetail } = route.params;
   const [clubData, setClubData] = useState(clubDetail);
   const [posts, setPosts] = useState();
@@ -54,6 +57,18 @@ const Club = ({ route }) => {
       {clubData && (
         <>
           <Text style={styles.title}>{clubData.name}</Text>
+          <TouchableOpacity
+            style={styles.groupChatBtn}
+            onPress={() => {
+              navigation.navigate("ClubChat", { clubData });
+              Toast.show({
+                type: "success",
+                text1: `Joined ${clubData.name} Club`,
+              });
+            }}
+          >
+            <Text style={styles.groupChatTxt}>Join Chat</Text>
+          </TouchableOpacity>
           <FlatList
             data={posts}
             renderItem={({ item }) => <Feed feed_detail={item} />}
@@ -100,5 +115,18 @@ const styles = StyleSheet.create({
   postTitle: {
     fontSize: 20,
     color: colors.accent,
+  },
+  groupChatBtn: {
+    padding: 7,
+    borderWidth: 3,
+    marginBottom: 7,
+    alignItems: "center",
+    borderRadius: 10,
+    borderColor: colors.accent,
+  },
+  groupChatTxt: {
+    color: colors.secondary,
+    fontSize: 16,
+    fontWeight: "800",
   },
 });

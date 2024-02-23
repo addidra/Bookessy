@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
   StatusBar,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -31,21 +32,15 @@ const RegistrationScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
-  const auth = FIREBASE_AUTH;
-
-  const handleRegister = async () => {
-    setLoading(true);
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      alert("User Created");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleNext = () => {
+    if (email == "" || password == "" || username == "" || bio == "") {
+      Toast.show({
+        type: "error",
+        text1: "Enter all detail",
+      });
+      return;
+    }
     const userInfo = {
       email: email,
       password: password,
@@ -93,13 +88,10 @@ const RegistrationScreen = () => {
             onChangeText={(text) => setBio(text)}
           />
         </View>
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <TouchableHighlight style={styles.button} onPress={handleNext}>
-            <Text style={styles.buttonText}>Next</Text>
-          </TouchableHighlight>
-        )}
+
+        <TouchableHighlight style={styles.button} onPress={handleNext}>
+          <Text style={styles.buttonText}>Next</Text>
+        </TouchableHighlight>
       </View>
     </View>
   );

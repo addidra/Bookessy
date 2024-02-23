@@ -139,7 +139,10 @@ const ChatBotMain = () => {
           value={prompt}
           onChangeText={(text) => setPrompt(text)}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendPrompt}>
+        <TouchableOpacity
+          style={styles.sendButton}
+          //  onPress={sendPrompt}
+        >
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>

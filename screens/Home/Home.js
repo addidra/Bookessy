@@ -16,7 +16,8 @@ import Feed from "./Feed";
 import ChatBotMain from "./ChatBotMain.js";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase.js";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import colors from "../../colors.js";
 const Home = () => {
   const [loaded] = useFonts({
     Pacifico: require("../../assets/fonts/Pacifico-Regular.ttf"),
@@ -82,7 +83,12 @@ const Home = () => {
             navigation.navigate("ChatBot");
           }}
         >
-          <Text style={{ color: "white", textAlign: "center" }}>ChatBot</Text>
+          <MaterialCommunityIcons
+            name="robot-excited"
+            size={28}
+            color={colors.secondary}
+            style={{ alignSelf: "center" }}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#e4d5b7",
-    fontSize: 20,
+    fontSize: 28,
     fontFamily: "Pacifico",
   },
   chat: {

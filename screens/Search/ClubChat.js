@@ -2,41 +2,30 @@ import {
   StyleSheet,
   Text,
   View,
+  FlatList,
   TextInput,
   TouchableOpacity,
-  FlatList,
 } from "react-native";
-import React, { useState, useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useEffect, useState } from "react";
+import colors from "../../colors";
 import {
   collection,
-  addDoc,
-  onSnapshot,
   query,
+  where,
   orderBy,
+  onSnapshot,
   getDoc,
   doc,
-  where,
+  addDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import {
-  FIREBASE_AUTH,
-  FIREBASE_FIRESTORE,
-  getAuthenticatedUserId,
-} from "../../firebase";
-
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
-
-const Chat = ({ route }) => {
-  const { userDetail } = route.params;
-  const [message, setMessage] = useState("");
+import { FIREBASE_AUTH, FIREBASE_FIRESTORE } from "../../firebase";
+const ClubChat = ({ route }) => {
+  // States
+  const { clubData } = route.params;
   const [chatMessages, setChatMessages] = useState([]);
+  const [message, setMessage] = useState("");
   const userUID = FIREBASE_AUTH.currentUser.uid;
-
   // Functions
   const sendMessage = async () => {
     let localMessage = message;
@@ -46,54 +35,49 @@ const Chat = ({ route }) => {
       await addDoc(collection(FIREBASE_FIRESTORE, "Chats"), {
         message: localMessage,
         timestamp: serverTimestamp(),
-        senderUsername: userSnap.data().username,
-        participants: [userUID, userDetail.id],
+        serderUsername: userSnap.data().username,
+        room: clubData.name,
         sender: userUID,
-        recipient: userDetail.id,
       });
     }
   };
 
   // Effects
   useEffect(() => {
-    console.log("Personal Chat", userDetail);
     const q = query(
       collection(FIREBASE_FIRESTORE, "Chats"),
-      where("participants", "array-contains", userUID),
+      where("room", "==", clubData.name),
       orderBy("timestamp", "asc")
     );
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
-
-        if (data.participants.includes(userDetail.id))
-          messages.push({ id: doc.id, ...doc.data() });
+        messages.push({ id: doc.id, ...doc.data() });
       });
       setChatMessages(messages);
     });
-
     return () => unsubscribe();
-  }, [userUID, userDetail.id]);
+  }, [clubData, userUID]);
 
-  // Components
-  const renderChatMessage = ({ item }) => (
-    <View
-      style={[
-        styles.messageContainer,
-        item.sender === userUID ? styles.senderMsg : styles.recipientMsg,
-      ]}
-    >
-      <Text style={styles.sender}>{item.senderUsername}</Text>
-      <Text style={styles.message}>{item.message}</Text>
-    </View>
-  );
+  //Compoenents
+  const renderChatMessage = ({ item }) => {
+    return (
+      <View
+        style={[
+          styles.messageContainer,
+          item.sender === userUID ? styles.senderMsg : styles.recipientMsg,
+        ]}
+      >
+        <Text style={styles.sender}>{item.serderUsername}</Text>
+        <Text style={styles.message}>{item.message}</Text>
+      </View>
+    );
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.senderID}>
-        {userDetail.username} -- {userDetail.bio}
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.senderID}>{clubData.name}</Text>
       <FlatList
         data={chatMessages}
         renderItem={renderChatMessage}
@@ -110,11 +94,11 @@ const Chat = ({ route }) => {
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
-export default Chat;
+export default ClubChat;
 
 const styles = StyleSheet.create({
   container: {

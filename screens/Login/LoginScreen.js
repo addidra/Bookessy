@@ -9,6 +9,7 @@ import {
   TextInput,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { TouchableHighlight } from "react-native";
@@ -16,6 +17,7 @@ import { useFonts } from "expo-font";
 import { FIREBASE_AUTH } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const colors = {
   primary: "#242038",
@@ -35,46 +37,30 @@ const LoginScreen = () => {
   const auth = FIREBASE_AUTH;
 
   const handleLogin = async () => {
+    if (email == "" || password == "") {
+      Toast.show({
+        type: "error",
+        text1: "Enter all detail",
+      });
+      return;
+    }
     setLoading(true);
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       console.log(res);
-      alert("Logged in Succesfully");
+      Toast.show({
+        type: "success",
+        text1: "Logged in Succesfully",
+        text2: `Welcome ${email}`,
+      });
     } catch (err) {
       if (err.code === "auth/invalid-credential") {
-        alert("Invalid Login Details");
+        Toast.show({ type: "error", text1: "Invalid Login Details" });
       }
       console.log(err);
     } finally {
       setLoading(false);
     }
-  };
-
-  const signUp = async () => {
-    setLoading(true);
-    const login_detail = {
-      email: email,
-      password: password,
-    };
-    console.log(login_detail);
-    axios
-      .post("http://0.0.0.0:8000/auth/", login_detail)
-      .then((res) => {
-        if (res.data.success === true) {
-          const user = res.data.user_id;
-          console.log("User ID: ", user);
-          alert("Successfully logged in");
-
-          // for now
-          navigation.navigate("Main");
-        } else {
-          alert("Invalid Login Details");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(setLoading(false));
   };
 
   const toRegister = () => {

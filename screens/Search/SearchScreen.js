@@ -14,7 +14,6 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
-
 const SearchScreen = () => {
   const navigation = useNavigation();
   const [clubList, setClubList] = useState(null);

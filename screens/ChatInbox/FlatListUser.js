@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 import { getAuthenticatedUserId } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const FlatListUser = ({ item }) => {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ const FlatListUser = ({ item }) => {
         await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
           homies: arrayRemove(userUID),
         });
+        Toast.show({ type: "success", text1: "Homie Removed" });
       } else {
         setHomieFlag(true);
         await updateDoc(doc(FIREBASE_FIRESTORE, "Users", userUID), {
@@ -40,6 +42,7 @@ const FlatListUser = ({ item }) => {
         await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
           homies: arrayUnion(userUID),
         });
+        Toast.show({ type: "success", text1: "Homie Added" });
       }
     } catch (error) {}
   };

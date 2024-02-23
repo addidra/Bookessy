@@ -20,16 +20,18 @@ import {
 } from "../../firebase";
 import ClubList from "../Search/ClubList";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
+import Toast from "react-native-toast-message";
 const colors = {
   primary: "#242038",
   secondary: "#f7ece1",
   accent: "#9067C6",
 };
+import { useNavigation } from "@react-navigation/native";
 
 const MoreDetail = ({ route }) => {
   // Object definition
   const auth = FIREBASE_AUTH;
+  const navigation = useNavigation();
 
   // States
   const { userInfo } = route.params;
@@ -79,8 +81,18 @@ const MoreDetail = ({ route }) => {
       await setDoc(userRef, {
         ...userInfo,
       });
+      Toast.show({
+        type: "success",
+        text1: "Resgistered successfully",
+        text2: `welcome ${userInfo.email}`,
+      });
     } catch (error) {
       console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Invalid registration details",
+      });
+      navigation.navigate("Registration");
     } finally {
       setLoading(false);
     }

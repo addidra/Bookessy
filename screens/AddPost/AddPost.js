@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useRef, useState } from "react";
@@ -20,6 +21,7 @@ import {
 } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const colors = {
   primary: "#242038",
@@ -54,6 +56,14 @@ const AddPost = () => {
   };
 
   const handleSubmit = async () => {
+    if (caption == "" || content == "" || selectedClub == "Select Club") {
+      Toast.show({
+        type: "error",
+        text1: "Enter all field",
+      });
+      return;
+    }
+
     const newPost = {
       caption: caption,
       content: content,
@@ -70,6 +80,10 @@ const AddPost = () => {
       setCaption("");
       setContent("");
       setSelectedClub("Select Club");
+      Toast.show({
+        type: "success",
+        text1: "Think Posted",
+      });
     } catch (error) {
       console.log("Handle submit error: ", error);
     }
@@ -184,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 120,
   },
   input: {
     height: 50,

@@ -46,23 +46,6 @@ const ChatInbox = () => {
     }
   };
 
-  // const getUserList = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(
-  //       collection(FIREBASE_FIRESTORE, "Users")
-  //     );
-  //     let userList = [];
-  //     querySnapshot.forEach((doc) => {
-  //       userList.push({ id: doc.id, ...doc.data() });
-  //     });
-  //     userList = userList.filter((user) => user.id !== userUID);
-  //     setUserList(userList);
-  //     setFilteredUserList(userList);
-  //   } catch (err) {
-  //     console.log("this is the getUserList Error: ", err);
-  //   }
-  // };
-
   const getHomieList = async () => {
     try {
       let currentUserDoc = await getDoc(

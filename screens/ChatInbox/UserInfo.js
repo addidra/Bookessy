@@ -24,7 +24,7 @@ import {
   getAuthenticatedUserId,
 } from "../../firebase";
 import Feed from "../Home/Feed";
-
+import Toast from "react-native-toast-message";
 const colors = {
   primary: "#242038",
   secondary: "#f7ece1",
@@ -47,6 +47,8 @@ const UserInfo = ({ route }) => {
         await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
           homies: arrayRemove(userUID),
         });
+        Toast.show({ type: "success", text1: "Homie Removed" });
+        v;
       } else {
         setHomieFlag(true);
         await updateDoc(doc(FIREBASE_FIRESTORE, "Users", userUID), {
@@ -55,6 +57,7 @@ const UserInfo = ({ route }) => {
         await updateDoc(doc(FIREBASE_FIRESTORE, "Users", id), {
           homies: arrayUnion(userUID),
         });
+        Toast.show({ type: "success", text1: "Homie Added" });
       }
     } catch (error) {}
   };
