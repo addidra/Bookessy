@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
@@ -16,11 +17,12 @@ import { dummyMessages } from "./constant";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../../colors";
 import { apiCall } from "../../openAI";
-
+import Toast from "react-native-toast-message";
 const ChatBotMain = () => {
   // States
   const [messages, setMessages] = useState([]);
   const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Functions
   const sendPrompt = () => {
@@ -28,15 +30,20 @@ const ChatBotMain = () => {
       let newMessages = [...messages];
       newMessages.push({ role: "user", content: prompt.trim() });
       setMessages([...newMessages]);
-
+      setLoading(true);
       apiCall(prompt.trim(), newMessages).then((res) => {
         console.log("got api data: ", res);
         if (res.success) {
           setMessages([...res.data]);
           setPrompt("");
         } else {
-          Alert.alert("Error: ", res.msg);
+          Toast.show({
+            type: "error",
+            text1: "Too many reques or low network",
+            text2: res.msg,
+          });
         }
+        setLoading(false);
       });
     }
   };
@@ -139,11 +146,12 @@ const ChatBotMain = () => {
           value={prompt}
           onChangeText={(text) => setPrompt(text)}
         />
-        <TouchableOpacity
-          style={styles.sendButton}
-          //  onPress={sendPrompt}
-        >
-          <Text style={styles.sendButtonText}>Send</Text>
+        <TouchableOpacity style={styles.sendButton} onPress={sendPrompt}>
+          {loading ? (
+            <ActivityIndicator color={colors.primary} />
+          ) : (
+            <Text style={styles.sendButtonText}>Send</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>
