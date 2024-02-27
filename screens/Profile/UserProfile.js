@@ -25,13 +25,7 @@ import {
 import Feed from "../Home/Feed";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
-
+import colors from "../../colors";
 const UserProfile = () => {
   // Setup
   const navigation = useNavigation();
@@ -75,6 +69,11 @@ const UserProfile = () => {
     }
   };
 
+  const reload = () => {
+    getUser();
+    getPosts();
+  };
+
   // Effects
   useEffect(() => {
     getUser();
@@ -89,8 +88,7 @@ const UserProfile = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getUser();
-      getPosts();
+      reload();
     }, [])
   );
 
@@ -137,16 +135,20 @@ const UserProfile = () => {
               <Text style={styles.userCount}>
                 {user.homies ? user.homies.length : 0}
               </Text>
-              <Text style={{ color: colors.secondary }}>Homies</Text>
+              <Text style={{ color: colors.accent, fontWeight: "900" }}>
+                Homies
+              </Text>
             </View>
             <TouchableHighlight onPress={handleLogout} style={styles.logoutBtn}>
-              <Text style={{ color: colors.secondary }}>Log Out</Text>
+              <Text>Log Out</Text>
             </TouchableHighlight>
           </View>
           {posts.length != 0 ? (
             <FlatList
               data={posts}
-              renderItem={({ item }) => <Feed feed_detail={item} />}
+              renderItem={({ item }) => (
+                <Feed feed_detail={item} user={true} reload={reload} />
+              )}
               keyExtractor={(item) => item.id}
               ListHeaderComponent={<Text style={styles.postTitle}>POSTS</Text>}
               showsVerticalScrollIndicator={false}
@@ -174,7 +176,7 @@ export default UserProfile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingTop: 10,
   },
@@ -187,14 +189,13 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 40,
     fontFamily: "Pacifico",
-    color: colors.accent,
+    color: colors.highlight,
   },
   logoutBtn: {
     padding: 7,
-    color: colors.secondary,
+    backgroundColor: colors.accent,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: colors.accent,
   },
   headerDetails: {
     flexDirection: "row",
@@ -202,11 +203,10 @@ const styles = StyleSheet.create({
   },
   userCount: {
     fontSize: 45,
-    color: colors.secondary,
+    color: colors.accent,
     alignSelf: "center",
   },
   userBio: {
-    color: colors.secondary,
     fontSize: 15,
     fontStyle: "italic",
     paddingBottom: 10,

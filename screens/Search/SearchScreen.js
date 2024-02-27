@@ -14,6 +14,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
+import colors from "../../colors";
 const SearchScreen = () => {
   const navigation = useNavigation();
   const [clubList, setClubList] = useState(null);
@@ -88,10 +89,10 @@ const SearchScreen = () => {
                 navigation.navigate("Club", { clubDetail: item });
               }}
             >
-              <Text style={{ color: "#e4d5b7", fontSize: 44 }}>
+              <Text style={{ color: colors.accent, fontSize: 44 }}>
                 {item.name}
               </Text>
-              <Text style={{ color: "pink" }}>{item.description}</Text>
+              <Text>{item.description}</Text>
             </TouchableOpacity>
           );
         }}
@@ -107,7 +108,7 @@ export default SearchScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
   },
   searchInput: {
     color: "white",
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   club: {
+    backgroundColor: colors.secondary,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,

@@ -63,22 +63,28 @@ const FlatListUser = ({ item }) => {
           navigation.navigate("UserInfoScreen", { userDetail: item });
         }}
       >
-        <Text style={{ color: "#e4d5b7", fontSize: 44 }}>{item.username}</Text>
-        <Text style={{ color: "pink" }}>{item.bio}</Text>
+        <Text style={{ color: colors.highlight, fontSize: 44 }}>
+          {item.username}
+        </Text>
+        <Text>{item.bio}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => addFriend(item.id)}>
         {homieFlag ? (
           <FontAwesome5
             name="handshake-slash"
             size={35}
-            color={colors.secondary}
+            color={colors.accent}
           />
         ) : (
-          <FontAwesome5 name="handshake" size={35} color={colors.secondary} />
+          <FontAwesome5 name="handshake" size={35} color={colors.accent} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Entypo name="chat" size={35} color={colors.secondary} />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("PersonalChat", { userDetail: item });
+        }}
+      >
+        <Entypo name="chat" size={35} color={colors.accent} />
       </TouchableOpacity>
     </View>
   );
@@ -88,6 +94,7 @@ export default FlatListUser;
 
 const styles = StyleSheet.create({
   user: {
+    backgroundColor: colors.secondary,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,

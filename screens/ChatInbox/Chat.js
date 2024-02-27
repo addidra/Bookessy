@@ -24,12 +24,7 @@ import {
   FIREBASE_FIRESTORE,
   getAuthenticatedUserId,
 } from "../../firebase";
-
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
 
 const Chat = ({ route }) => {
   const { userDetail } = route.params;
@@ -119,7 +114,7 @@ export default Chat;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 20,
   },
@@ -131,19 +126,18 @@ const styles = StyleSheet.create({
   },
   senderID: {
     fontSize: 20,
-    color: colors.secondary,
+    color: colors.highlight,
     fontFamily: "Pacifico",
     borderBottomWidth: 2,
     paddingBottom: 5,
     borderBottomColor: colors.accent,
   },
   sender: {
-    color: "#FFD700",
+    color: colors.highlight,
     fontSize: 16,
     marginBottom: 4,
   },
   message: {
-    color: "#FFFFFF",
     fontSize: 16,
   },
   inputContainer: {
@@ -161,22 +155,23 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: "#FFD700",
+    backgroundColor: colors.accent,
     borderRadius: 20,
   },
   sendButtonText: {
-    color: "#242038",
     fontSize: 16,
     fontWeight: "bold",
   },
   senderMsg: {
     alignSelf: "flex-end",
-    backgroundColor: "#9067C6", // Example color for sender's message
+    backgroundColor: colors.secondary, // Example color for sender's message
+    borderWidth: 1,
     marginRight: 12, // Adjust as needed
   },
   recipientMsg: {
     alignSelf: "flex-start",
-    backgroundColor: "#501287", // Example color for recipient's message
+    backgroundColor: colors.accent, // Example color for recipient's message
+    borderWidth: 1,
     marginLeft: 12, // Adjust as needed
   },
 });

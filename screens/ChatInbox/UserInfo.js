@@ -25,11 +25,7 @@ import {
 } from "../../firebase";
 import Feed from "../Home/Feed";
 import Toast from "react-native-toast-message";
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
 const UserInfo = ({ route }) => {
   const { userDetail } = route.params;
   const user = userDetail;
@@ -105,7 +101,9 @@ const UserInfo = ({ route }) => {
               <Text style={styles.userBio}>{user.bio}</Text>
             </View>
             <View style={styles.userCount}>
-              <Text style={{ color: colors.secondary }}>Homies</Text>
+              <Text style={{ color: colors.accent, fontWeight: "800" }}>
+                Homies
+              </Text>
               <Text style={styles.userCount}>{user.homies.length}</Text>
             </View>
             <TouchableOpacity onPress={() => addFriend(user.id)}>
@@ -113,13 +111,13 @@ const UserInfo = ({ route }) => {
                 <FontAwesome5
                   name="handshake-slash"
                   size={35}
-                  color={colors.secondary}
+                  color={colors.accent}
                 />
               ) : (
                 <FontAwesome5
                   name="handshake"
                   size={35}
-                  color={colors.secondary}
+                  color={colors.accent}
                 />
               )}
             </TouchableOpacity>
@@ -144,7 +142,7 @@ export default UserInfo;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingTop: 10,
   },
@@ -157,7 +155,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 40,
     fontFamily: "Pacifico",
-    color: colors.accent,
+    color: colors.highlight,
   },
   logoutBtn: {
     padding: 7,
@@ -172,11 +170,10 @@ const styles = StyleSheet.create({
   },
   userCount: {
     fontSize: 45,
-    color: colors.secondary,
+    color: colors.accent,
     alignSelf: "center",
   },
   userBio: {
-    color: colors.secondary,
     fontSize: 15,
     fontStyle: "italic",
     paddingBottom: 10,

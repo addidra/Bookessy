@@ -120,15 +120,15 @@ const ChatInbox = () => {
                     navigation.navigate("PersonalChat", { userDetail: item });
                   }}
                 >
-                  <Text style={{ color: "#e4d5b7", fontSize: 44 }}>
+                  <Text style={{ color: colors.highlight, fontSize: 44 }}>
                     {item.username}
                   </Text>
-                  <Text style={{ color: "pink" }}>{item.bio}</Text>
+                  <Text>{item.bio}</Text>
                 </TouchableOpacity>
                 <Feather
                   name="info"
                   size={35}
-                  color={colors.secondary}
+                  color={colors.accent}
                   onPress={() => {
                     navigation.navigate("UserInfoScreen", {
                       userDetail: item,
@@ -159,10 +159,9 @@ export default ChatInbox;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
   },
   searchInput: {
-    color: "white",
     width: "90%",
     height: 50,
     borderRadius: 10,
@@ -173,6 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   user: {
+    backgroundColor: colors.secondary,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   searchFocus: {
-    color: "white",
     width: "100%",
     height: 60,
     borderRadius: 10,

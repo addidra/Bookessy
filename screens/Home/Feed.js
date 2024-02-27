@@ -5,6 +5,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
+  Modal,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -28,8 +29,11 @@ import {
   TapGestureHandler,
 } from "react-native-gesture-handler";
 import { deleteDoc } from "firebase/firestore";
+import { AntDesign } from "@expo/vector-icons";
+import colors from "../../colors";
+import Toast from "react-native-toast-message";
 
-const Feed = ({ feed_detail }) => {
+const Feed = ({ feed_detail, user = false, reload }) => {
   // States
   const userUID = FIREBASE_AUTH.currentUser.uid;
   const [postData, setPostData] = useState({
@@ -39,6 +43,7 @@ const Feed = ({ feed_detail }) => {
   });
   const [like, setLike] = useState(false);
   const [updateFlag, setUpdateFlag] = useState(false);
+  const [deleteToggle, setDeleteToggle] = useState(false);
 
   // Function
 
@@ -123,11 +128,57 @@ const Feed = ({ feed_detail }) => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await deleteDoc(doc(FIREBASE_FIRESTORE, "Posts", feed_detail.id));
+      reload();
+      Toast.show({
+        type: "success",
+        text1: "Posts is Deleted",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Effect
   useEffect(() => {
     getPostRef();
+    console.log(feed_detail);
   }, []);
 
+  const DeleteConfirmationDialog = ({ visible, onCancel, onConfirm }) => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={visible}
+        onRequestClose={onCancel}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>
+              Are you sure you want to delete this post?
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={{ ...styles.button, backgroundColor: colors.accent }}
+                onPress={onCancel}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ ...styles.button, backgroundColor: "#f44336" }}
+                onPress={onConfirm}
+              >
+                <Text style={styles.textStyle}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
   return (
     <GestureHandlerRootView>
       <View
@@ -148,7 +199,12 @@ const Feed = ({ feed_detail }) => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={[styles.title, { color: "orange" }]}>
+              <Text
+                style={[
+                  styles.title,
+                  { color: colors.accent, fontWeight: "900" },
+                ]}
+              >
                 {postData.username}
               </Text>
               <View style={styles.likeContainer}>
@@ -158,13 +214,13 @@ const Feed = ({ feed_detail }) => {
                     <MaterialCommunityIcons
                       name="cards-diamond"
                       size={24}
-                      color="pink"
+                      color={colors.accent}
                     />
                   ) : (
                     <MaterialCommunityIcons
                       name="cards-diamond-outline"
                       size={24}
-                      color="pink"
+                      color={colors.accent}
                     />
                   )}
                 </TouchableOpacity>
@@ -181,6 +237,7 @@ const Feed = ({ feed_detail }) => {
                   borderColor: "black",
                   margin: 10,
                   padding: 10,
+                  backgroundColor: colors.secondary,
                 }}
               >
                 <Text style={[styles.title, styles.rang]}>
@@ -196,8 +253,24 @@ const Feed = ({ feed_detail }) => {
                 </Text>
               </View>
             </TapGestureHandler>
-            <View style={styles.item}>
+            <View style={user && styles.item}>
               <Text style={styles.rang}>{postData.caption}</Text>
+              {user && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setDeleteToggle(true);
+                  }}
+                >
+                  <AntDesign name="delete" size={18} color="red" />
+                </TouchableOpacity>
+              )}
+              <DeleteConfirmationDialog
+                visible={deleteToggle}
+                onCancel={() => {
+                  setDeleteToggle(false);
+                }}
+                onConfirm={handleDelete}
+              />
             </View>
           </>
         )}
@@ -210,14 +283,12 @@ export default Feed;
 
 const styles = StyleSheet.create({
   item: {
-    // backgroundColor:"yellow"
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   title: {
     // color: "black",
     // flex: 1,
-  },
-  rang: {
-    color: "pink",
   },
   likeContainer: {
     flexDirection: "row",
@@ -225,5 +296,37 @@ const styles = StyleSheet.create({
   likeCounter: {
     paddingHorizontal: 10,
     color: "white",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.1)",
+  },
+  modalView: {
+    backgroundColor: colors.secondary,
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    marginHorizontal: 10,
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

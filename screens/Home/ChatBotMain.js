@@ -56,7 +56,7 @@ const ChatBotMain = () => {
         <MaterialCommunityIcons
           name="robot-excited"
           size={64}
-          color={colors.secondary}
+          color={colors.highlight}
           style={{ alignSelf: "center" }}
         />
         <View>
@@ -163,7 +163,7 @@ export default ChatBotMain;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
     // alignItems: "center",
     // justifyContent: "space-between",
     padding: 20,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: "#FFD700",
+    backgroundColor: colors.accent,
     borderRadius: 20,
   },
   sendButtonText: {

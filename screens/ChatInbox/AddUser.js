@@ -79,7 +79,7 @@ const AddUser = () => {
         color="0000ff"
         style={{
           justifyContent: "center",
-          backgroundColor: "#242038",
+          backgroundColor: colors.primary,
           alignItems: "center",
           flex: 1,
         }}
@@ -112,7 +112,7 @@ export default AddUser;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
   },
   searchInput: {
     color: "white",

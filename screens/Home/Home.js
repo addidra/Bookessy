@@ -86,7 +86,7 @@ const Home = () => {
           <MaterialCommunityIcons
             name="robot-excited"
             size={28}
-            color={colors.secondary}
+            color={colors.highlight}
             style={{ alignSelf: "center" }}
           />
         </TouchableOpacity>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
   },
   topBar: {
     flexDirection: "row", // Ensure that child elements can be positioned relative to this container
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    color: "#e4d5b7",
+    color: colors.highlight,
     fontSize: 28,
     fontFamily: "Pacifico",
   },

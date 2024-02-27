@@ -22,12 +22,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
 
 const AddPost = () => {
   // State variables to store user inputs
@@ -126,7 +121,14 @@ const AddPost = () => {
   return (
     <View style={styles.container}>
       {/* <Button onPress={test} title="Click Me"></Button> */}
+      <Text
+        style={{ color: colors.highlight, fontSize: 30, paddingBottom: 30 }}
+      >
+        Add New Post
+      </Text>
       <TextInput
+        multiline={true}
+        numberOfLines={7}
         style={styles.input}
         placeholder="Enter Quote from Book"
         placeholderTextColor="gray"
@@ -134,7 +136,7 @@ const AddPost = () => {
         onChangeText={(text) => setContent(text)}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { height: 50 }]}
         placeholder="Additional Comment"
         placeholderTextColor="gray"
         value={caption}
@@ -185,7 +187,7 @@ const AddPost = () => {
         </View>
       )}
       <TouchableOpacity onPress={handleSubmit} style={styles.submitBtn}>
-        <Text style={{ color: colors.secondary, fontSize: 20 }}>Submit</Text>
+        <Text style={{ fontSize: 20 }}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -194,28 +196,26 @@ const AddPost = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "flex-start",
     padding: 20,
     paddingTop: 120,
   },
   input: {
-    height: 50,
     width: "90%",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: colors.accent,
     marginBottom: 20,
     paddingHorizontal: 10,
-    color: "white",
   },
   dropdownSelector: {
     width: "90%",
     height: 50,
     borderRadius: 10,
-    borderWidth: 0.5,
-    borderColor: "gray",
+    borderWidth: 1,
+    borderColor: colors.accent,
     alignSelf: "center",
     marginBottom: 20,
     flexDirection: "row",
@@ -232,7 +232,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   searchInput: {
-    color: "white",
     width: "90%",
     height: 50,
     borderRadius: 10,
@@ -253,8 +252,8 @@ const styles = StyleSheet.create({
   submitBtn: {
     padding: 10,
     borderWidth: 2,
-    borderColor: colors.accent,
     borderRadius: 15,
+    backgroundColor: colors.accent,
   },
 });
 

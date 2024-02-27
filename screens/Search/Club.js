@@ -19,11 +19,8 @@ import { query, where } from "firebase/firestore";
 import Feed from "../Home/Feed";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
+
 const Club = ({ route }) => {
   const navigation = useNavigation();
   const { clubDetail } = route.params;
@@ -92,24 +89,22 @@ export default Club;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#242038",
+    backgroundColor: colors.primary,
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
   innerContainer: {
     rowGap: 20,
     borderBottomWidth: 2,
-    borderBottomColor: colors.secondary,
     paddingBottom: 10,
   },
   title: {
     fontSize: 50,
-    color: colors.accent,
+    color: colors.highlight,
     textAlign: "center",
     fontFamily: "Pacifico",
   },
   description: {
-    color: colors.secondary,
     textAlign: "justify",
   },
   postTitle: {
@@ -117,15 +112,14 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
   groupChatBtn: {
+    backgroundColor: colors.accent,
     padding: 7,
     borderWidth: 3,
     marginBottom: 7,
     alignItems: "center",
     borderRadius: 10,
-    borderColor: colors.accent,
   },
   groupChatTxt: {
-    color: colors.secondary,
     fontSize: 16,
     fontWeight: "800",
   },
