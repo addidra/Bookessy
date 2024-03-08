@@ -193,7 +193,7 @@ const Feed = ({ feed_detail, user = false, reload }) => {
         {!postData ||
         postData.username == undefined ||
         postData.name == undefined ? (
-          <ActivityIndicator />
+          <ActivityIndicator color={colors.highlight} />
         ) : (
           <>
             <View

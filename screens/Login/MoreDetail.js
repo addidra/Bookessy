@@ -21,11 +21,7 @@ import {
 import ClubList from "../Search/ClubList";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Toast from "react-native-toast-message";
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
 import { useNavigation } from "@react-navigation/native";
 
 const MoreDetail = ({ route }) => {
@@ -113,10 +109,10 @@ const MoreDetail = ({ route }) => {
     return (
       <ActivityIndicator
         size={54}
-        color="0000ff"
+        color={colors.highlight}
         style={{
           justifyContent: "center",
-          backgroundColor: "#242038",
+          backgroundColor: colors.primary,
           alignItems: "center",
           flex: 1,
         }}
@@ -139,7 +135,7 @@ const MoreDetail = ({ route }) => {
         </TouchableOpacity>
       ))}
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={colors.highlight} />
       ) : (
         <TouchableHighlight style={styles.button} onPress={handleRegister}>
           <Text style={styles.buttonText}>Next</Text>

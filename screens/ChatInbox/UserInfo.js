@@ -131,7 +131,7 @@ const UserInfo = ({ route }) => {
           />
         </>
       ) : (
-        <ActivityIndicator size={50} color="blue" />
+        <ActivityIndicator size={50} color={colors.highlight} />
       )}
     </SafeAreaView>
   );

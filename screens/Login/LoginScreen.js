@@ -19,11 +19,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
 
 const LoginScreen = () => {
   const [loaded] = useFonts({
@@ -81,7 +77,6 @@ const LoginScreen = () => {
               style={styles.input}
               placeholder="Email"
               value={email}
-              placeholderTextColor={colors.secondary}
               onChangeText={(text) => setEmail(text)}
             />
             <TextInput
@@ -89,13 +84,12 @@ const LoginScreen = () => {
               placeholder="Password"
               secureTextEntry
               value={password}
-              placeholderTextColor={colors.secondary}
               onChangeText={(text) => setPassword(text)}
             />
           </View>
           {/* Login Button */}
           {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color={colors.highlight} />
           ) : (
             <TouchableHighlight style={styles.button} onPress={handleLogin}>
               <Text style={styles.buttonText}>Login</Text>
@@ -128,19 +122,19 @@ const styles = StyleSheet.create({
     width: 300,
   },
   text: {
-    color: colors.secondary,
+    color: colors.accent,
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 20,
   },
   logo: {
-    color: "yellow",
+    color: colors.highlight,
     position: "absolute",
     top: -60,
     left: 0,
     right: 0,
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 40,
     fontFamily: "Pacifico",
   },
   formContainer: {
@@ -149,12 +143,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: colors.secondary,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: colors.secondary,
   },
   button: {
     backgroundColor: colors.accent,
@@ -162,16 +154,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     marginTop: 20,
+    borderWidth: 2,
   },
   buttonText: {
     textAlign: "center",
-    color: colors.secondary,
     fontSize: 16,
     fontWeight: "bold",
   },
   divider: {
     height: 1,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.accent,
     marginVertical: 30,
   },
   registrationText: {

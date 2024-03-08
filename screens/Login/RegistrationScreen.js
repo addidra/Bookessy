@@ -15,11 +15,7 @@ import { useFonts } from "expo-font";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-const colors = {
-  primary: "#242038",
-  secondary: "#f7ece1",
-  accent: "#9067C6",
-};
+import colors from "../../colors";
 
 const RegistrationScreen = () => {
   useFonts({
@@ -62,14 +58,12 @@ const RegistrationScreen = () => {
             style={styles.input}
             placeholder="Email"
             value={email}
-            placeholderTextColor={colors.secondary}
             onChangeText={(text) => setEmail(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Username"
             value={username}
-            placeholderTextColor={colors.secondary}
             onChangeText={(text) => setUsername(text)}
           />
           <TextInput
@@ -77,14 +71,14 @@ const RegistrationScreen = () => {
             placeholder="Set New Password"
             secureTextEntry
             value={password}
-            placeholderTextColor={colors.secondary}
             onChangeText={(text) => setPassword(text)}
           />
           <TextInput
+            multiline={true}
+            numberOfLines={7}
             style={styles.inputbio}
             placeholder="Little about yourself"
             value={bio}
-            placeholderTextColor={colors.secondary}
             onChangeText={(text) => setBio(text)}
           />
         </View>
@@ -110,19 +104,19 @@ const styles = StyleSheet.create({
     width: 300,
   },
   text: {
-    color: colors.secondary,
+    color: colors.accent,
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 20,
   },
   logo: {
-    color: "yellow",
+    color: colors.highlight,
     position: "absolute",
     top: -60,
     left: 0,
     right: 0,
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 40,
     fontFamily: "Pacifico",
   },
   formContainer: {
@@ -131,12 +125,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: colors.secondary,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: colors.secondary,
   },
   button: {
     backgroundColor: colors.accent,
@@ -144,16 +136,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     marginTop: 20,
+    borderWidth: 1,
   },
   buttonText: {
     textAlign: "center",
-    color: colors.secondary,
     fontSize: 16,
     fontWeight: "bold",
   },
   divider: {
     height: 1,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.accent,
     marginVertical: 30,
   },
   registrationText: {
@@ -164,12 +156,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   inputbio: {
-    height: 80,
-    borderColor: colors.secondary,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: colors.secondary,
   },
 });

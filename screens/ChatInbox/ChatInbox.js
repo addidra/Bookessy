@@ -86,10 +86,10 @@ const ChatInbox = () => {
     return (
       <ActivityIndicator
         size={54}
-        color="0000ff"
+        color={colors.highlight}
         style={{
           justifyContent: "center",
-          backgroundColor: "#242038",
+          backgroundColor: colors.primary,
           alignItems: "center",
           flex: 1,
         }}

@@ -58,10 +58,10 @@ const SearchScreen = () => {
     return (
       <ActivityIndicator
         size={54}
-        color="0000ff"
+        color={colors.highlight}
         style={{
           justifyContent: "center",
-          backgroundColor: "#242038",
+          backgroundColor: colors.primary,
           alignItems: "center",
           flex: 1,
         }}
@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   searchInput: {
-    color: "white",
     width: "90%",
     height: 50,
     borderRadius: 10,
@@ -130,7 +129,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   searchFocus: {
-    color: "white",
+    color: "black",
     width: "100%",
     height: 60,
     borderRadius: 10,

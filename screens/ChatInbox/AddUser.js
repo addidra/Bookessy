@@ -76,7 +76,7 @@ const AddUser = () => {
     return (
       <ActivityIndicator
         size={54}
-        color="0000ff"
+        color={colors.highlight}
         style={{
           justifyContent: "center",
           backgroundColor: colors.primary,

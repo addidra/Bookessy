@@ -15,12 +15,27 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { dummyMessages } from "./constant";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 import colors from "../../colors";
-import { apiCall } from "../../openAI";
+// import { apiCall } from "../../openAI";
 import Toast from "react-native-toast-message";
+import axios from "axios";
 const ChatBotMain = () => {
   // States
-  const [messages, setMessages] = useState([]);
+  const [loaded] = useFonts({
+    Pacifico: require("../../assets/fonts/Pacifico-Regular.ttf"),
+  });
+  const [messages, setMessages] = useState([
+    {
+      category: "",
+      role: "assistant",
+      content: {
+        summary: "Hey! What kind of club are you looking for? ",
+        book: "",
+        achievement: "",
+      },
+    },
+  ]);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -47,15 +62,46 @@ const ChatBotMain = () => {
       });
     }
   };
-  // Effects
 
+  const sendRequest = async () => {
+    let newMessages = [...messages];
+    newMessages.push({ role: "user", content: prompt.trim() });
+    setPrompt("");
+    setMessages([...newMessages]);
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://192.168.219.174:1024/predict_club_suggestions",
+        {
+          user_prompt: prompt,
+        }
+      );
+      if (response.data.status === "success") {
+        setMessages([...newMessages, response.data]);
+      } else {
+        setMessages([...newMessages, response.data]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Effects
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
   // Components
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
         <MaterialCommunityIcons
           name="robot-excited"
-          size={64}
+          size={34}
           color={colors.highlight}
           style={{ alignSelf: "center" }}
         />
@@ -64,49 +110,73 @@ const ChatBotMain = () => {
             <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
               {messages.map((msg, index) => {
                 if (msg.role == "assistant") {
-                  if (msg.content.includes("https")) {
-                    // an ai img
-                    return (
+                  return (
+                    <View
+                      style={{
+                        marginBottom: 10,
+                      }}
+                      key={index}
+                    >
                       <View
-                        key={index}
                         style={{
-                          marginBottom: 10,
+                          width: "85%",
+                          backgroundColor: colors.highlight,
                           borderRadius: 20,
-                          overflow: "hidden", // Ensure that the image stays within the bounds of the container
+                          padding: 10,
+                          rowGap: 10,
                         }}
                       >
-                        <Image
-                          source={{ uri: msg.content }}
-                          resizeMode="contain"
+                        {msg.category && (
+                          <>
+                            <Text style={{ color: colors.secondary }}>
+                              Club you would like to visit:
+                            </Text>
+                            <Text
+                              style={[
+                                styles.bold,
+                                {
+                                  color: colors.secondary,
+                                  fontSize: 30,
+                                },
+                              ]}
+                            >
+                              {msg.category}
+                            </Text>
+                          </>
+                        )}
+                        <Text
                           style={{
-                            height: 175,
-                            width: "90%",
-                            borderRadius: 20,
-                          }} // Adjust height as per your requirement
-                        />
-                      </View>
-                    );
-                  } else {
-                    return (
-                      <View
-                        style={{
-                          marginBottom: 10,
-                        }}
-                        key={index}
-                      >
-                        <View
-                          style={{
-                            width: "70%",
-                            backgroundColor: "red",
-                            borderRadius: 20,
-                            padding: 7,
+                            color: colors.secondary,
                           }}
                         >
-                          <Text style={styles.bold}>{msg.content}</Text>
-                        </View>
+                          {msg.content.summary}
+                        </Text>
+                        {msg.category && (
+                          <>
+                            <Text
+                              style={[styles.bold, { color: colors.secondary }]}
+                            >
+                              Top Books
+                            </Text>
+                            <Text
+                              style={{
+                                color: colors.secondary,
+                              }}
+                            >
+                              {msg.content.book}
+                            </Text>
+                            <Text
+                              style={{
+                                color: colors.secondary,
+                              }}
+                            >
+                              {msg.content.achievement}
+                            </Text>
+                          </>
+                        )}
                       </View>
-                    );
-                  }
+                    </View>
+                  );
                 } else {
                   //user input
                   return (
@@ -121,7 +191,7 @@ const ChatBotMain = () => {
                       <View
                         style={{
                           width: "70%",
-                          backgroundColor: "pink",
+                          backgroundColor: colors.secondary,
                           borderRadius: 20,
                           padding: 7,
                         }}
@@ -146,7 +216,11 @@ const ChatBotMain = () => {
           value={prompt}
           onChangeText={(text) => setPrompt(text)}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendPrompt}>
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={sendRequest}
+          // onPress={sendPrompt}
+        >
           {loading ? (
             <ActivityIndicator color={colors.primary} />
           ) : (
@@ -171,7 +245,7 @@ const styles = StyleSheet.create({
   chatContainer: {
     backgroundColor: "gray",
     opacity: 1,
-    height: 600,
+    height: 650,
     borderRadius: 20,
     padding: 10,
     marginBottom: 20,
