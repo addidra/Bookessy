@@ -1,27 +1,22 @@
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesome5, Entypo } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   FIREBASE_AUTH,
   FIREBASE_FIRESTORE,
-  onAuthStateChanged,
   collection,
   getDocs,
   query,
   where,
   doc,
-  getDoc,
-  getAuthenticatedUserId,
 } from "../../firebase";
 import Feed from "../Home/Feed";
 import Toast from "react-native-toast-message";

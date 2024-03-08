@@ -9,15 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import {
-  FIREBASE_FIRESTORE,
-  getDocs,
-  collection,
-  getAuthenticatedUserId,
-  getDoc,
-  doc,
-  FIREBASE_AUTH,
-} from "../../firebase";
+import { FIREBASE_FIRESTORE, getDoc, doc, FIREBASE_AUTH } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../colors";
 import { AntDesign } from "@expo/vector-icons";
@@ -27,8 +19,6 @@ import { useFocusEffect } from "@react-navigation/native";
 const ChatInbox = () => {
   const userUID = FIREBASE_AUTH.currentUser.uid;
   const navigation = useNavigation();
-  const [userList, setUserList] = useState(null);
-  const [filteredUserList, setFilteredUserList] = useState();
   const searchRef = useRef();
   const [searchFocus, setSearchFocus] = useState(false);
   const [homies, setHomies] = useState();

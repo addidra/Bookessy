@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  FlatList,
   StyleSheet,
   Text,
   View,
@@ -14,11 +13,9 @@ import {
   getDocs,
   collection,
   FIREBASE_AUTH,
-  addDoc,
   setDoc,
   doc,
 } from "../../firebase";
-import ClubList from "../Search/ClubList";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Toast from "react-native-toast-message";
 import colors from "../../colors";

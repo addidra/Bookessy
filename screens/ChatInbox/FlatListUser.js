@@ -15,7 +15,6 @@ import {
   where,
   getDoc,
 } from "firebase/firestore";
-import { getAuthenticatedUserId } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 

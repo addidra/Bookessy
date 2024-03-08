@@ -4,14 +4,10 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ClubList from "./ClubList";
-import DUMMY_DATA from "../../DUMMY_DATA";
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../../colors";

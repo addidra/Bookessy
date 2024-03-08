@@ -19,11 +19,7 @@ import {
   where,
   serverTimestamp,
 } from "firebase/firestore";
-import {
-  FIREBASE_AUTH,
-  FIREBASE_FIRESTORE,
-  getAuthenticatedUserId,
-} from "../../firebase";
+import { FIREBASE_AUTH, FIREBASE_FIRESTORE } from "../../firebase";
 import colors from "../../colors";
 
 const Chat = ({ route }) => {

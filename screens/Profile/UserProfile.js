@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -93,35 +92,6 @@ const UserProfile = () => {
   );
 
   // Component
-  const UserHeader = () => {
-    return (
-      <>
-        <View style={{ rowGap: 7 }}>
-          <View style={styles.headerDetails}>
-            <TouchableOpacity
-              style={styles.userCount}
-              onPress={() => {
-                navigation.navigate("Chat");
-              }}
-            >
-              <Text style={styles.userCount}>
-                {user.homies ? user.homies.length : 0}
-              </Text>
-              <Text style={{ color: colors.secondary }}>Homies</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.userCount}>
-              <Text style={styles.userCount}>
-                {user.clubsFollowing ? user.clubsFollowing.length : 0}
-              </Text>
-              <Text style={{ color: colors.secondary }}>Clubs Following</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.postTitle}>POSTS</Text>
-        </View>
-      </>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       {user ? (

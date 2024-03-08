@@ -2,21 +2,18 @@ import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import {
   TouchableOpacity,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
   TextInput,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { TouchableHighlight } from "react-native";
 import { useFonts } from "expo-font";
 import { FIREBASE_AUTH } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import axios from "axios";
 import Toast from "react-native-toast-message";
 
 import colors from "../../colors";

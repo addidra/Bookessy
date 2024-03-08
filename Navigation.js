@@ -8,7 +8,6 @@ import SearchScreen from "./screens/Search/SearchScreen";
 import Club from "./screens/Search/Club";
 import AddPost from "./screens/AddPost/AddPost";
 import UserProfile from "./screens/Profile/UserProfile";
-import { SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Chat from "./screens/ChatInbox/Chat";
 import ChatBotMain from "./screens/Home/ChatBotMain";

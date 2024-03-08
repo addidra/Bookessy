@@ -3,14 +3,11 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   FlatList,
   Alert,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useRef, useState } from "react";
-import { Picker } from "@react-native-picker/picker";
 import { Feather } from "@expo/vector-icons";
 import {
   FIREBASE_FIRESTORE,
@@ -108,10 +105,6 @@ const AddPost = () => {
     }
   };
 
-  const test = () => {
-    console.log(selectedClub);
-  };
-
   // Effects
   useEffect(() => {
     getClubList();
@@ -120,7 +113,6 @@ const AddPost = () => {
 
   return (
     <View style={styles.container}>
-      {/* <Button onPress={test} title="Click Me"></Button> */}
       <Text
         style={{ color: colors.highlight, fontSize: 30, paddingBottom: 30 }}
       >
@@ -168,7 +160,7 @@ const AddPost = () => {
           />
           <FlatList
             data={filteredClubList}
-            renderItem={({ item, index }) => {
+            renderItem={({ item }) => {
               return (
                 <TouchableOpacity
                   style={styles.clubItem}
@@ -183,6 +175,7 @@ const AddPost = () => {
                 </TouchableOpacity>
               );
             }}
+            keyExtractor={(_, index) => index}
           />
         </View>
       )}

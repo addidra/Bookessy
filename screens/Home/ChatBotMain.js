@@ -3,28 +3,18 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { dummyMessages } from "./constant";
+import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
 import colors from "../../colors";
-// import { apiCall } from "../../openAI";
 import Toast from "react-native-toast-message";
 import axios from "axios";
 const ChatBotMain = () => {
   // States
-  const [loaded] = useFonts({
-    Pacifico: require("../../assets/fonts/Pacifico-Regular.ttf"),
-  });
+
   const [messages, setMessages] = useState([
     {
       category: "",
@@ -40,28 +30,28 @@ const ChatBotMain = () => {
   const [loading, setLoading] = useState(false);
 
   // Functions
-  const sendPrompt = () => {
-    if (prompt.trim().length > 0) {
-      let newMessages = [...messages];
-      newMessages.push({ role: "user", content: prompt.trim() });
-      setMessages([...newMessages]);
-      setLoading(true);
-      apiCall(prompt.trim(), newMessages).then((res) => {
-        console.log("got api data: ", res);
-        if (res.success) {
-          setMessages([...res.data]);
-          setPrompt("");
-        } else {
-          Toast.show({
-            type: "error",
-            text1: "Too many reques or low network",
-            text2: res.msg,
-          });
-        }
-        setLoading(false);
-      });
-    }
-  };
+  // const sendPrompt = () => {
+  //   if (prompt.trim().length > 0) {
+  //     let newMessages = [...messages];
+  //     newMessages.push({ role: "user", content: prompt.trim() });
+  //     setMessages([...newMessages]);
+  //     setLoading(true);
+  //     apiCall(prompt.trim(), newMessages).then((res) => {
+  //       console.log("got api data: ", res);
+  //       if (res.success) {
+  //         setMessages([...res.data]);
+  //         setPrompt("");
+  //       } else {
+  //         Toast.show({
+  //           type: "error",
+  //           text1: "Too many reques or low network",
+  //           text2: res.msg,
+  //         });
+  //       }
+  //       setLoading(false);
+  //     });
+  //   }
+  // };
 
   const sendRequest = async () => {
     let newMessages = [...messages];

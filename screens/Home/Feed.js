@@ -2,12 +2,11 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
   Modal,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   FIREBASE_FIRESTORE,
@@ -17,14 +16,11 @@ import {
   doc,
   updateDoc,
   addDoc,
-  getAuthenticatedUserId,
   query,
   where,
   getDocs,
 } from "../../firebase";
 import {
-  Gesture,
-  GestureDetector,
   GestureHandlerRootView,
   TapGestureHandler,
 } from "react-native-gesture-handler";
@@ -295,7 +291,8 @@ const styles = StyleSheet.create({
   },
   likeCounter: {
     paddingHorizontal: 10,
-    color: "white",
+    color: colors.highlight,
+    alignSelf: "center",
   },
   centeredView: {
     flex: 1,

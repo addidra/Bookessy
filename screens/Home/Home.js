@@ -1,5 +1,4 @@
 import {
-  Pressable,
   StyleSheet,
   Text,
   View,
@@ -7,13 +6,10 @@ import {
   FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
-import DUMMY_DATA from "../../DUMMY_DATA.js";
 import Feed from "./Feed";
-import ChatBotMain from "./ChatBotMain.js";
 import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase.js";
 import { useFocusEffect } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -57,24 +53,6 @@ const Home = () => {
   }
   return (
     <SafeAreaView style={styles.container}>
-      {/* <TouchableOpacity
-        style={{
-          borderWidth: 2,
-          borderRadius: 100,
-          width: 70,
-          position: "absolute",
-          bottom: 1,
-          right: 1,
-          backgroundColor: "pink",
-          paddingVertical: 10,
-          zIndex: 10,
-        }}
-        onPress={() => {
-          navigation.navigate("ChatBot");
-        }}
-      >
-        <Text style={{ color: "white", textAlign: "center" }}>ChatBot</Text>
-      </TouchableOpacity> */}
       <View style={styles.topBar}>
         <Text style={[styles.title]}>Bookessy</Text>
         <TouchableOpacity

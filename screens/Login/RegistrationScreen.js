@@ -4,16 +4,11 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  StatusBar,
-  ActivityIndicator,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { useFonts } from "expo-font";
-import { FIREBASE_APP, FIREBASE_AUTH } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import colors from "../../colors";
 
@@ -25,7 +20,6 @@ const RegistrationScreen = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 

@@ -2,10 +2,7 @@ import {
   ActivityIndicator,
   FlatList,
   StyleSheet,
-  Text,
   TextInput,
-  View,
-  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useRef } from "react";
@@ -14,26 +11,18 @@ import {
   getDocs,
   collection,
   FIREBASE_AUTH,
-  getAuthenticatedUserId,
-  getDoc,
-  doc,
-  updateDoc,
 } from "../../firebase";
-import { useNavigation } from "@react-navigation/native";
 import colors from "../../colors";
-import { FontAwesome5, Entypo } from "@expo/vector-icons";
-import { arrayRemove, arrayUnion, query, where } from "firebase/firestore";
 import FlatListUser from "./FlatListUser";
 
 const AddUser = () => {
   // States
   const userUID = FIREBASE_AUTH.currentUser.uid;
-  const navigation = useNavigation();
+
   const [userList, setUserList] = useState(null);
   const [filteredUserList, setFilteredUserList] = useState();
   const searchRef = useRef();
   const [searchFocus, setSearchFocus] = useState(false);
-  const [homieFlag, setHomieFlag] = useState(false);
 
   // Functions
 

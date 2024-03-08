@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -7,14 +6,7 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import DUMMY_DATA from "../../DUMMY_DATA";
-import {
-  FIREBASE_FIRESTORE,
-  getDoc,
-  doc,
-  getDocs,
-  collection,
-} from "../../firebase";
+import { FIREBASE_FIRESTORE, getDocs, collection } from "../../firebase";
 import { query, where } from "firebase/firestore";
 import Feed from "../Home/Feed";
 import { useNavigation } from "@react-navigation/native";
