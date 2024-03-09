@@ -73,6 +73,7 @@ const ChatBotMain = () => {
       }
     } catch (error) {
       console.log(error);
+      Toast.show({ type: "error", text1: "Not Connected to the network" });
     } finally {
       setLoading(false);
     }
