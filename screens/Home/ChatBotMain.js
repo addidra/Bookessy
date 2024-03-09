@@ -82,10 +82,8 @@ const ChatBotMain = () => {
   useEffect(() => {
     console.log(messages);
   }, [messages]);
+
   // Components
-  if (!loaded) {
-    return null;
-  }
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
